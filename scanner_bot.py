@@ -15,9 +15,10 @@ app = Flask('')
 def home():
     return "Hello World! Scanner Bot is Running 24/7."
 
+# Trong scanner_bot.py
 def run_web():
-    # Railway sẽ cấp một cổng (PORT) tự động, ta cần lấy nó
-    port = int(os.environ.get("PORT", 8080))
+    # Koyeb sẽ tự cấp PORT, nếu không có thì mặc định là 8000
+    port = int(os.environ.get("PORT", 8000)) 
     app.run(host='0.0.0.0', port=port)
 
 def keep_alive():
