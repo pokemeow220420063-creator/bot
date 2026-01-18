@@ -36,21 +36,32 @@ bot = commands.Bot(command_prefix=";", intents=intents)
 
 # (Giữ nguyên hàm parse_to_dict và lệnh ;l như cũ)
 def parse_to_dict(msg):
-    data = {"id": msg.id, "content": msg.content, "embeds": [], "components": []}
+    data = {
+        "id": msg.id,
+        "content": msg.content,
+        "embeds": [],
+        "components": []
+    }
+    
     for emb in msg.embeds:
-        data["embeds"].append({
+        # Thêm phần fields vào đây
+        embed_data = {
             "author": emb.author.name if emb.author else None,
-            "title": emb.title, "description": emb.description,
+            "title": emb.title,
+            "description": emb.description,
             "footer": emb.footer.text if emb.footer else None,
-        })
-    for row in msg.components:
-        for comp in row.children:
-            if isinstance(comp, discord.Button):
-                data["components"].append({
-                    "label": comp.label, "custom_id": comp.custom_id,
-                    "emoji": str(comp.emoji) if comp.emoji else None
-                })
-    return data
+            "fields": [] # Khởi tạo danh sách fields
+        }
+        
+        # Lặp qua tất cả các field (Currencies, Balls, Fishing...)
+        for field in emb.fields:
+            embed_data["fields"].append({
+                "name": field.name,
+                "value": field.value,
+                "inline": field.inline
+            })
+            
+        data["embeds"].append(embed_data)
 
 @bot.command(name="l")
 async def latest_data(ctx, amount: int = 1):
