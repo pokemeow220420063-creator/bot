@@ -45,10 +45,13 @@ def parse_message_full(msg):
         "channel_id": msg.channel.id,
         "guild_id": msg.guild.id if msg.guild else None,
         "created_at": str(msg.created_at),
+        "edited_at": str(msg.edited_at) if msg.edited_at else None,  # ⭐ QUAN TRỌNG
+        "is_edited": msg.edited_at is not None,                      # ⭐ RẤT TIỆN
         "content": msg.content,
         "jump_url": msg.jump_url,
-        "flags": dict(msg.flags) # Các cờ (như has_thread, ephemeral...)
+        "flags": dict(msg.flags)
     }
+
 
     # 2. Thông tin người gửi (Author)
     data["author"] = {
